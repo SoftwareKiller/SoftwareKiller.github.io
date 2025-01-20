@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="blotdb简介boltdb&#x2F;bolt: An embedded key&#x2F;value database for Go. Bolt是一款go语言实现的嵌入式K&#x2F;V数据库。它的API稳定，文件格式固定。经过生成环境验证，是用于学习数据库很好的入门材料。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="blotdb">
+<meta property="og:url" content="http://example.com/2025/01/20/blot/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="blotdb简介boltdb&#x2F;bolt: An embedded key&#x2F;value database for Go. Bolt是一款go语言实现的嵌入式K&#x2F;V数据库。它的API稳定，文件格式固定。经过生成环境验证，是用于学习数据库很好的入门材料。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-20T10:44:52.740Z">
+<meta property="article:author" content="Con">
+<meta property="article:tag" content="db">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2025/01/20/blot/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2025/01/20/blot/","path":"2025/01/20/blot/","title":"blotdb"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>blotdb | Hexo</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#blotdb"><span class="nav-number">1.</span> <span class="nav-text">blotdb</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%BC%80%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.2.</span> <span class="nav-text">打开数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E9%94%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">文件锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.2.2.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.2.3.</span> <span class="nav-text">重新加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8"><span class="nav-number">1.3.</span> <span class="nav-text">存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CreateBucket"><span class="nav-number">1.3.1.</span> <span class="nav-text">CreateBucket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#put"><span class="nav-number">1.3.2.</span> <span class="nav-text">put</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get"><span class="nav-number">1.3.3.</span> <span class="nav-text">get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rebalance"><span class="nav-number">1.3.4.</span> <span class="nav-text">rebalance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spill"><span class="nav-number">1.3.5.</span> <span class="nav-text">spill</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.4.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.1.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E4%BA%8B%E5%8A%A1%EF%BC%9A"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">写事务：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">读事务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">原子性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E6%80%A7"><span class="nav-number">1.4.1.5.</span> <span class="nav-text">隔离性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Con</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/01/20/blot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Con">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="blotdb | Hexo">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          blotdb
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-20 00:00:00 / Modified: 18:44:52" itemprop="dateCreated datePublished" datetime="2025-01-20T00:00:00+08:00">2025-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="blotdb"><a href="#blotdb" class="headerlink" title="blotdb"></a>blotdb</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a target="_blank" rel="noopener" href="https://github.com/boltdb/bolt">boltdb&#x2F;bolt: An embedded key&#x2F;value database for Go.</a></p>
+<p>Bolt是一款go语言实现的嵌入式<code>K/V</code>数据库。它的API稳定，文件格式固定。经过生成环境验证，是用于学习数据库很好的入门材料。</p>
+<span id="more"></span>
+
+<p>它拥有如下性质：</p>
+<ul>
+<li>键值对<code>K/V</code>存储，底层通过B+树作为实现</li>
+<li>支持<code>ACID</code>事务，允许多个读事务和一个写事务并发执行</li>
+<li>支持<code>namespace</code>，每对<code>K/V</code>通过bucket区分，支持嵌套bucket</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	BucketName = <span class="string">&quot;TBucket&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// Open the my.db data file in your current directory.</span></span><br><span class="line">	<span class="comment">// It will be created if it doesn&#x27;t exist.</span></span><br><span class="line">	db, err := bolt.Open(<span class="string">&quot;my.db&quot;</span>, <span class="number">0600</span>, &amp;bolt.Options&#123;</span><br><span class="line">		Timeout: <span class="number">1</span> * time.Second,</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> db.Close()</span><br><span class="line">	tx, err := db.Begin(<span class="literal">true</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	b, err := tx.CreateBucketIfNotExists([]<span class="type">byte</span>(BucketName))</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		tx.Rollback()</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//b := tx.Bucket([]byte(BucketName))</span></span><br><span class="line">	b.Put([]<span class="type">byte</span>(<span class="string">&quot;DDDD&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;BBBB&quot;</span>))</span><br><span class="line">	<span class="comment">//b.Put([]byte(&quot;XXXX&quot;), []byte(&quot;AAAAA&quot;))</span></span><br><span class="line">	fmt.Println(<span class="type">string</span>(b.Get([]<span class="type">byte</span>(<span class="string">&quot;XXXX&quot;</span>))))</span><br><span class="line">	err = tx.Commit()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		tx.Rollback()</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的db是blot中的顶级对象，它表示磁盘中的单个文件，并表示数据的一致性快照。</p>
+<p>上述代码做了如下几件事：</p>
+<ol>
+<li>打开一个名为<code>my.db</code>的文件，如果不存在则创建</li>
+<li>开启一个事务</li>
+<li>获取一个名为<code>TBucket</code>的bucket，如果不存在则创建</li>
+<li>写入<code>DDDD/BBBB</code>的键值对</li>
+<li>提交事务，失败则发生回滚</li>
+</ol>
+<h2 id="打开数据库"><a href="#打开数据库" class="headerlink" title="打开数据库"></a>打开数据库</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Open creates and opens a database at the given path.</span></span><br><span class="line"><span class="comment">// If the file does not exist then it will be created automatically.</span></span><br><span class="line"><span class="comment">// Passing in nil options will cause Bolt to open the database with the default options.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Open</span><span class="params">(path <span class="type">string</span>, mode os.FileMode, options *Options)</span></span> (*DB, <span class="type">error</span>) &#123;</span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">if</span> err := flock(db, mode, !db.readOnly, options.Timeout); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		_ = db.<span class="built_in">close</span>()</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Initialize the database if it doesn&#x27;t exist.</span></span><br><span class="line">	<span class="keyword">if</span> info, err := db.file.Stat(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> info.Size() == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// Initialize new files with meta pages.</span></span><br><span class="line">		<span class="keyword">if</span> err := db.init(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="comment">// Read the first meta page to determine the page size.</span></span><br><span class="line">		<span class="keyword">var</span> buf [<span class="number">0x1000</span>]<span class="type">byte</span></span><br><span class="line">		<span class="keyword">if</span> _, err := db.file.ReadAt(buf[:], <span class="number">0</span>); err == <span class="literal">nil</span> &#123;</span><br><span class="line">			m := db.pageInBuffer(buf[:], <span class="number">0</span>).meta()</span><br><span class="line">			<span class="keyword">if</span> err := m.validate(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">				db.pageSize = os.Getpagesize()</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				db.pageSize = <span class="type">int</span>(m.pageSize)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Memory map the data file.</span></span><br><span class="line">	<span class="keyword">if</span> err := db.mmap(options.InitialMmapSize); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		_ = db.<span class="built_in">close</span>()</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Read in the freelist.</span></span><br><span class="line">	db.freelist = newFreelist()</span><br><span class="line">	db.freelist.read(db.page(db.meta().freelist))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Mark the database as opened and return.</span></span><br><span class="line">	<span class="keyword">return</span> db, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="文件锁"><a href="#文件锁" class="headerlink" title="文件锁"></a>文件锁</h3><p>锁定文件，以便其他使用 Bolt 读写模式的进程不能同时使用数据库。这会导致损坏，因为两个进程将分别写入元页面和空闲页面。<br>数据库文件被独占锁定（只有一个进程可以获取锁）。<br>如果 !options.ReadOnly。<br>使用共享锁锁定数据库文件（多个进程可能同时持有锁）否则（options.ReadOnly 已设置）。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	branchPageFlag   = <span class="number">0x01</span></span><br><span class="line">	leafPageFlag     = <span class="number">0x02</span></span><br><span class="line">	metaPageFlag     = <span class="number">0x04</span></span><br><span class="line">	freelistPageFlag = <span class="number">0x10</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> page <span class="keyword">struct</span> &#123;</span><br><span class="line">	id       pgid</span><br><span class="line">	flags    <span class="type">uint16</span>  <span class="comment">// 页面类型，上面4种类型，用于标记此页面存储了何种类型的信息</span></span><br><span class="line">	count    <span class="type">uint16</span></span><br><span class="line">	overflow <span class="type">uint32</span></span><br><span class="line">	ptr      <span class="type">uintptr</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> meta <span class="keyword">struct</span> &#123;</span><br><span class="line">	magic    <span class="type">uint32</span></span><br><span class="line">	version  <span class="type">uint32</span></span><br><span class="line">	pageSize <span class="type">uint32</span></span><br><span class="line">	flags    <span class="type">uint32</span></span><br><span class="line">	root     bucket</span><br><span class="line">	freelist pgid</span><br><span class="line">	pgid     pgid</span><br><span class="line">	txid     txid</span><br><span class="line">	checksum <span class="type">uint64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// pageInBuffer retrieves a page reference from a given byte array based on the current page size.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(db *DB)</span></span> pageInBuffer(b []<span class="type">byte</span>, id pgid) *page &#123;</span><br><span class="line">	<span class="keyword">return</span> (*page)(unsafe.Pointer(&amp;b[id*pgid(db.pageSize)]))</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// pageInBuffer是通过pgid来获取该页面的起始位置的</span></span><br><span class="line"><span class="comment">// type pgid uint64</span></span><br><span class="line"><span class="comment">// 再通过指针转换为page对象，每个页面的起始位置存储着page的元信息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(db *DB)</span></span> pageInBuffer(b []<span class="type">byte</span>, id pgid) *page &#123;</span><br><span class="line">	<span class="keyword">return</span> (*page)(unsafe.Pointer(&amp;b[id*(db.pageSize)]))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这是初始化的签名</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(db *DB)</span></span> init() <span class="type">error</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>初始化的时候，分配了操作系统页面大小的4页内存，Linux通常一页是4k，这里是16k内存</li>
+<li>第0、1页分配给了meta</li>
+<li>第2页分配给了freelist</li>
+<li>第3页分配给了leaf</li>
+<li>然后写入文件</li>
+</ol>
+<h3 id="重新加载"><a href="#重新加载" class="headerlink" title="重新加载"></a>重新加载</h3><p>重新加载就是读取第0页的数据，通过第0页的数据初始化mata，然后校验了一下mata是否发生过篡改。其中<code>m.sum()</code>是通过单向映射的方式检查是否发生过部分写入的情况。一旦这里出现问题，意味着数据库崩了，当然通常这也不会出问题。</p>
+<p>当数据通过mata被初始化后，db通过<code>mmap</code>这种方式将文件映射到内存，这样的好处是减少了系统调用，缺点全是指针操作，需要自己手动去寻找地址，增加了复杂性。</p>
+<p>当映射建立后，通过mata种的pgid找到page，通过page初始化freelist。</p>
+<p>至此，db初始化完毕。</p>
+<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>blot的数据，全部按页存储，页大小取OS的页大小，Linux下通常为4K。</p>
+<p>上面说了，第0，1页初始化的时候分给mata了。</p>
+<p>第2页分配给freelist，用于管理空闲页的，事务在结束后，可能会剩余一些空页面，这些页由freelist管理，下次申请的时候复用，如果不够则通过mmap重新映射。</p>
+<p>而剩下被使用的页，即从第3页开始，构成一棵完整的B+树。</p>
+<p>B+树这部分可以通过如下代码得知：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// init creates a new database file and initializes its meta pages.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(db *DB)</span></span> init() <span class="type">error</span> &#123;</span><br><span class="line">	<span class="comment">// Set the page size to the OS page size.</span></span><br><span class="line">	db.pageSize = os.Getpagesize()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Create two meta pages on a buffer.</span></span><br><span class="line">	buf := <span class="built_in">make</span>([]<span class="type">byte</span>, db.pageSize*<span class="number">4</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">2</span>; i++ &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// 这里的3其实就是从0分配的第四页，也就是B+树的根</span></span><br><span class="line">		m.root = bucket&#123;root: <span class="number">3</span>&#125;</span><br><span class="line">		m.pgid = <span class="number">4</span></span><br><span class="line">		m.txid = txid(i)</span><br><span class="line">		m.checksum = m.sum64()</span><br><span class="line">	&#125;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Write an empty leaf page at page 4.</span></span><br><span class="line">	p = db.pageInBuffer(buf[:], pgid(<span class="number">3</span>))</span><br><span class="line">	p.id = pgid(<span class="number">3</span>)</span><br><span class="line">    <span class="comment">// 这里被初始化为叶子节点</span></span><br><span class="line">	p.flags = leafPageFlag</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>B+树即Bucket的访问需要通过<code>Tx</code>对象，无论读写，都需要在事务对象的管理下进行访问。</p>
+<p>可以通过事务初始化的代码进行理解：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// init initializes the transaction.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(tx *Tx)</span></span> init(db *DB) &#123;</span><br><span class="line">	tx.db = db</span><br><span class="line">	tx.pages = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Copy the meta page since it can be changed by the writer.</span></span><br><span class="line">	tx.meta = &amp;meta&#123;&#125;</span><br><span class="line">    <span class="comment">// 这里是将meta的数据拷贝给tx</span></span><br><span class="line">	db.meta().<span class="built_in">copy</span>(tx.meta)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Copy over the root bucket.</span></span><br><span class="line">	tx.root = newBucket(tx)</span><br><span class="line">	tx.root.bucket = &amp;bucket&#123;&#125;</span><br><span class="line">    <span class="comment">// 事务中B+树的根节点指向root，即数据库的根节点</span></span><br><span class="line">	*tx.root.bucket = tx.meta.root</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CreateBucket"><a href="#CreateBucket" class="headerlink" title="CreateBucket"></a>CreateBucket</h3><p>blot管理数据是通过一个个<code>Bucket</code>来进行管理的，而<code>Bucket</code>组成了数据库一个个的分支，每一个子分支也构成一个B+树。</p>
+<p>下面是B+树的存储结构，<code>Bucket</code>和<code>node</code>是管理结构，<code>inode</code>是存储结构。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Bucket <span class="keyword">struct</span> &#123;</span><br><span class="line">	*bucket</span><br><span class="line">	tx       *Tx                <span class="comment">// the associated transaction</span></span><br><span class="line">	buckets  <span class="keyword">map</span>[<span class="type">string</span>]*Bucket <span class="comment">// subbucket cache</span></span><br><span class="line">	page     *page              <span class="comment">// inline page reference</span></span><br><span class="line">	rootNode *node              <span class="comment">// materialized node for the root page.</span></span><br><span class="line">	nodes    <span class="keyword">map</span>[pgid]*node     <span class="comment">// pgid跟node的映射，可以通过pgid找到起始页</span></span><br><span class="line">	FillPercent <span class="type">float64</span>	 <span class="comment">// 这是页的空间占用阈值，超过阈值进行分页，默认0.5</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// node represents an in-memory, deserialized page.</span></span><br><span class="line"><span class="keyword">type</span> node <span class="keyword">struct</span> &#123;</span><br><span class="line">	bucket     *Bucket</span><br><span class="line">	isLeaf     <span class="type">bool</span></span><br><span class="line">	unbalanced <span class="type">bool</span>  <span class="comment">// 合页标记</span></span><br><span class="line">	spilled    <span class="type">bool</span>  <span class="comment">// 分页标记</span></span><br><span class="line">	key        []<span class="type">byte</span></span><br><span class="line">	pgid       pgid</span><br><span class="line">	parent     *node</span><br><span class="line">	children   nodes</span><br><span class="line">	inodes     inodes <span class="comment">// 真正存数据的结构</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 当它为分支节点时，val里存储的是key所在的pgid</span></span><br><span class="line"><span class="keyword">type</span> inode <span class="keyword">struct</span> &#123;</span><br><span class="line">	flags <span class="type">uint32</span></span><br><span class="line">	pgid  pgid</span><br><span class="line">	key   []<span class="type">byte</span></span><br><span class="line">	value []<span class="type">byte</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> inodes []inode</span><br></pre></td></tr></table></figure>
+
+<p>这是创建Bucket的主流程：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Bucket)</span></span> CreateBucket(key []<span class="type">byte</span>) (*Bucket, <span class="type">error</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">	<span class="comment">// Move cursor to correct position.</span></span><br><span class="line">    <span class="comment">// cursor是Bucket的迭代器</span></span><br><span class="line">	c := b.Cursor()</span><br><span class="line">    <span class="comment">// 先查找key是否存在，初始化的时候已经拿到了根节点</span></span><br><span class="line">    <span class="comment">// 内部逻辑会将page结构转换为node结构，page的入口处是一个node结构，通过指针来进行类型转换</span></span><br><span class="line">	k, _, flags := c.seek(key)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Return an error if there is an existing key.</span></span><br><span class="line">	<span class="keyword">if</span> bytes.Equal(key, k) &#123;</span><br><span class="line">        <span class="comment">// bucketLeafFlag其实就是branchPageFlag</span></span><br><span class="line">        <span class="comment">// 开始搜引用没搜到，后来发现做了重命名</span></span><br><span class="line">		<span class="keyword">if</span> (flags &amp; bucketLeafFlag) != <span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span>, ErrBucketExists</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, ErrIncompatibleValue</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Create empty, inline bucket.</span></span><br><span class="line">	<span class="keyword">var</span> bucket = Bucket&#123;</span><br><span class="line">		bucket:      &amp;bucket&#123;&#125;,</span><br><span class="line">		rootNode:    &amp;node&#123;isLeaf: <span class="literal">true</span>&#125;,</span><br><span class="line">		FillPercent: DefaultFillPercent,</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">// 这里将bucket的header信息写入页的头部，拿到的返回值是页的入口地址</span></span><br><span class="line">	<span class="keyword">var</span> value = bucket.write()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Insert into node.</span></span><br><span class="line">	key = cloneBytes(key)</span><br><span class="line">    <span class="comment">// bucketLeafFlag上面说过，其实就是分支标记branchPageFlag</span></span><br><span class="line">    <span class="comment">// 也就是说，这里的key写入的value，其实是记录了bucketHeader的page入口</span></span><br><span class="line">	c.node().put(key, key, value, <span class="number">0</span>, bucketLeafFlag)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Since subbuckets are not allowed on inline buckets, we need to</span></span><br><span class="line">	<span class="comment">// dereference the inline page, if it exists. This will cause the bucket</span></span><br><span class="line">	<span class="comment">// to be treated as a regular, non-inline bucket for the rest of the tx.</span></span><br><span class="line">	b.page = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> b.Bucket(key), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="put"><a href="#put" class="headerlink" title="put"></a>put</h3><p>Bucket创建完成后，通过put写入，存在则覆盖，不存在则通过二分找到合适的索引，将该位置的数据往后搬移一位，将新数据填充进来。key的名字不能和bucket重复，否则报错。</p>
+<h3 id="get"><a href="#get" class="headerlink" title="get"></a>get</h3><p>获取数据，先通过二分拿到node，即桶的信息，然后在桶内进行二分查找。</p>
+<h3 id="rebalance"><a href="#rebalance" class="headerlink" title="rebalance"></a>rebalance</h3><p>这个操作主要是将空间利用率低的页重新合并。合并条件是页小于1&#x2F;4的空间占用时进行合并，即1KB，或key数量很小的页进行合并。</p>
+<h3 id="spill"><a href="#spill" class="headerlink" title="spill"></a>spill</h3><p>这个操作主要是将空间占用过高的页进行分页。</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>Blot的事务分只读和读写事务，所有操作都会经过事务管理。这里主要分析读写事务，Blot本身实现了<code>ACID</code>。</p>
+<ul>
+<li>持久性：写事务提交后，数据会落盘</li>
+<li>原子性：未提交的数据，会存于内存之中，提交的写事务会按照B+树数据、freelist、meta的数据写入文件，只有meta写入成功，整个事务才算写入完成，只写入前两个对数据库无影响，在下次读的时候，如果meta没有更新，不会读到之前写入了一半的数据</li>
+<li>隔离性：每个读事务开始时会获取一个版本号，读事务涉及到的page不会被写事务覆盖，提交的写事务才会更新数据库的版本号。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(tx *Tx)</span></span> init(db *DB)</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="写事务："><a href="#写事务：" class="headerlink" title="写事务："></a>写事务：</h4><ul>
+<li>拷贝了meta，初始化了一个bucket，txid自增1，创建<strong>只读事务</strong>，事务id不会发生自增。</li>
+<li>从<code>root bucket</code>开始遍历B+树进行操作，所有的修改在内存中进行</li>
+<li>提交写事务<ol>
+<li>平衡<code>B+</code>树，合并小页，分裂大页，分裂的时候会给每个修改过的<code>node</code>分配新的page</li>
+<li>给<code>freelist</code>分配新页</li>
+<li>将<code>B+</code>树和<code>freelist</code>写入文件</li>
+<li>将<code>meta</code>写入文件</li>
+</ol>
+</li>
+</ul>
+<h4 id="读事务"><a href="#读事务" class="headerlink" title="读事务"></a>读事务</h4><ul>
+<li>拷贝<code>meta</code>，初始化<code>root bucket</code></li>
+<li>将事务添加到<code>db.txs</code>，用于追踪读事务读到的页，被读到的页，写事务删改后不进行释放</li>
+<li>从<code>root bucket</code>开始，遍历<code>B+</code>树进行查找</li>
+<li>结束后移出<code>db.txs</code></li>
+</ul>
+<h4 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h4><p>写事务的数据落盘都是在commit中进行的，而在落盘之前，数据都是在内存中修改的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(tx *Tx)</span></span> Commit() <span class="type">error</span> &#123;</span><br><span class="line">	...</span><br><span class="line">	tx.root.rebalance()</span><br><span class="line">	...</span><br><span class="line">	tx.root.spill().</span><br><span class="line">	tx.meta.root.root = tx.root.root</span><br><span class="line">    <span class="comment">// 开辟连续页，先freelist，不够则mmap中获取</span></span><br><span class="line">	p, err := tx.allocate((tx.db.freelist.size() / tx.db.pageSize) + <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		tx.rollback()</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Write dirty pages to disk.</span></span><br><span class="line">	startTime = time.Now()</span><br><span class="line">	<span class="keyword">if</span> err := tx.write(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		tx.rollback()</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Write meta to disk.</span></span><br><span class="line">	<span class="keyword">if</span> err := tx.writeMeta(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		tx.rollback()</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>真正落盘时，先从<code>freelist</code>中获取连续空页，不够则通过mmap重新映射，所有有修改的写入都是新页。同时将之前有记录的页都释放掉，而此刻如果有读事务在读旧的记录页，则在读事务关闭时释放。</p>
+<h4 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h4><p>要么全成功，要么全失败，不存在中间状态。上面已经梳理过读写事务的流程和关键操作。现在来看一下出问题后，能否保证原子性。</p>
+<ul>
+<li>在写入过程中，提交之前<code>crash</code>，因为数据全部在内存中写入，此时不会对磁盘中数据造成影响</li>
+<li>如果是在<code>commit</code>过程中<code>crash</code>，因为<code>blotdb</code>的写入顺序，也保证了不会对数据造成影响<ul>
+<li>先写<code>freelist</code>，在写<code>B+</code>树</li>
+<li>最后写入<code>meta</code></li>
+</ul>
+</li>
+</ul>
+<p>因为<code>root bucket</code>和<code>freelist</code>的入口信息都保存在<code>meta</code>中，只有<code>meta</code>成功写入，事务才算成功。如果前面部分写入发生<code>crash</code>，因为数据都在新页，但<code>meta</code>未发生更新，那么后续拉起后仍然会访问之前的完整一致的数据。假设<code>mata</code>本身写入失败，<code>mata</code>中有<code>checksum</code>的校验码。此校验码是<code>mata</code>中的所有数据的摘要，一旦发生变化则会失效，此时<code>meta</code>中还有备份<code>meta1</code>。因此仍然可以保证正常使用。</p>
+<h4 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h4><p><code>blotdb</code>支持多写一读，这部分主要通过<code>freelist.pending</code>和<code>txid</code>等措施实现。多写通过加锁来阻止。多读本身不会对数据造成影响。而写过程中，写的数据都通过写时拷贝生成了新页，在提交前读事务是不会看到的，提交后发生修改数据的旧页会被释放，但是如果DB检查到读事务读取了该页，则会等待最后一个读事务关闭后再释放。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>blot</code>短小精悍，虽然代码简短，但是一个db该有的功能大部分都被实现了，值得一读。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/db/" rel="tag"># db</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/12/30/CPU%E5%92%8C%E7%BC%93%E5%AD%98/" rel="prev" title="CPU和缓存">
+                  <i class="fa fa-angle-left"></i> CPU和缓存
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Con</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
