@@ -111,7 +111,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -120,7 +120,7 @@
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -215,6 +215,91 @@
             </div>
           <!--/noindex-->
         
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/02/11/Deepseek%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Con">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="探索之地">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 探索之地">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/02/11/Deepseek%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="url">DeepSeek本地部署</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-02-11 00:00:00 / Modified: 23:59:40" itemprop="dateCreated datePublished" datetime="2025-02-11T00:00:00+08:00">2025-02-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="DeepSeek本地部署"><a href="#DeepSeek本地部署" class="headerlink" title="DeepSeek本地部署"></a>DeepSeek本地部署</h1><p>下载lmstudio，地址：<a target="_blank" rel="noopener" href="https://lmstudio.ai/">LM Studio - Discover, download, and run local LLMs</a></p>
+<p>使用安装包安装即可，这是用来加载模型的。</p>
+<p>下载模型，地址：<a target="_blank" rel="noopener" href="https://huggingface.co/">Hugging Face – The AI community building the future.</a></p>
+<p>因为我的PC上有10G显存的GPU，这里下载的是32B的模型，模型文件的格式要下载GGUF的格式，如果设备上没有GPU，仅使用CPU推理的话，最大不要超过8B。</p>
+<p>这是我的下载地址：<a target="_blank" rel="noopener" href="https://huggingface.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF/tree/main">bartowski&#x2F;DeepSeek-R1-Distill-Qwen-32B-GGUF at main</a></p>
+<p>下载前可以先通过lmstudio上的推荐查看一下性能是否足够支持。</p>
+<p>下载好之后，模型的目录需要在主目录的2层后才可以正常加载。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.lmstudio/models  <span class="comment"># 这是主目录</span></span><br><span class="line">.lmstudio/models/MyModels/DpR1_32B/md/DeepSeek-R1-Distill-Qwen-32B-IQ2_M</span><br></pre></td></tr></table></figure>
       
     </div>
 
