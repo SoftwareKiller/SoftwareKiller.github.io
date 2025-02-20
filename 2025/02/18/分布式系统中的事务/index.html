@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="分布式系统中的事务在聊分布式事务之前，先简单叙述一下本地事务的概念，方面给后面的内容做一下铺垫。 本地事务本地事务是指仅包含单一数据源，在对数据源进行一系列读写操作时，要么全部完成，要么全部失败，不存在中间状态。 事务应包含ACID下面四个属性：  原子性 一致性 隔离性 持久性  在应用层实现简单，通过BEGIN、COMMIT、ROLLBACK等语句来实现本地事务。常见关系型数据库如MySQL、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式系统中的事务">
+<meta property="og:url" content="http://example.com/2025/02/18/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BA%8B%E5%8A%A1/index.html">
+<meta property="og:site_name" content="探索之地">
+<meta property="og:description" content="分布式系统中的事务在聊分布式事务之前，先简单叙述一下本地事务的概念，方面给后面的内容做一下铺垫。 本地事务本地事务是指仅包含单一数据源，在对数据源进行一系列读写操作时，要么全部完成，要么全部失败，不存在中间状态。 事务应包含ACID下面四个属性：  原子性 一致性 隔离性 持久性  在应用层实现简单，通过BEGIN、COMMIT、ROLLBACK等语句来实现本地事务。常见关系型数据库如MySQL、">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/PixPin_2025-02-20_17-20-59.png">
+<meta property="og:image" content="http://example.com/images/PixPin_2025-02-20_17-21-39.png">
+<meta property="og:image" content="http://example.com/images/PixPin_2025-02-20_17-21-50.png">
+<meta property="article:published_time" content="2025-02-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-20T09:25:50.239Z">
+<meta property="article:author" content="Con">
+<meta property="article:tag" content="db">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/PixPin_2025-02-20_17-20-59.png">
+
+
+<link rel="canonical" href="http://example.com/2025/02/18/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BA%8B%E5%8A%A1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2025/02/18/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BA%8B%E5%8A%A1/","path":"2025/02/18/分布式系统中的事务/","title":"分布式系统中的事务"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>分布式系统中的事务 | 探索之地</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">探索之地</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">分布式系统中的事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.1.</span> <span class="nav-text">本地事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.2.</span> <span class="nav-text">分布式事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP%E4%B8%8EACID"><span class="nav-number">1.2.1.</span> <span class="nav-text">CAP与ACID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%94%E6%80%A7%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.2.2.</span> <span class="nav-text">柔性事务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%B6%88%E6%81%AF%E8%A1%A8"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">可靠消息表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCC"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">TCC</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Con</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/02/18/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BA%8B%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Con">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="探索之地">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="分布式系统中的事务 | 探索之地">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          分布式系统中的事务
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-02-18 00:00:00" itemprop="dateCreated datePublished" datetime="2025-02-18T00:00:00+08:00">2025-02-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-02-20 17:25:50" itemprop="dateModified" datetime="2025-02-20T17:25:50+08:00">2025-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="分布式系统中的事务"><a href="#分布式系统中的事务" class="headerlink" title="分布式系统中的事务"></a>分布式系统中的事务</h1><p>在聊分布式事务之前，先简单叙述一下本地事务的概念，方面给后面的内容做一下铺垫。</p>
+<h2 id="本地事务"><a href="#本地事务" class="headerlink" title="本地事务"></a>本地事务</h2><p>本地事务是指仅包含单一数据源，在对数据源进行<strong>一系列读写操作</strong>时，要么全部完成，要么全部失败，不存在中间状态。</p>
+<p>事务应包含ACID下面四个属性：</p>
+<ul>
+<li>原子性</li>
+<li>一致性</li>
+<li>隔离性</li>
+<li>持久性</li>
+</ul>
+<p>在应用层实现简单，通过<code>BEGIN</code>、<code>COMMIT</code>、<code>ROLLBACK</code>等语句来实现本地事务。常见关系型数据库如MySQL、Oracle都实现了本地事务。</p>
+<span id="more"></span>
+
+<h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><p>如果单一数据源的存储、计算等资源无法满足需求，自然而然的就会想到增加机器来增加资源，用于解决单一数据源无法解决的问题，但是引入机器，在解决了一部分问题的同时，也引入了新的问题。</p>
+<p>首先是CAP与ACID的矛盾。</p>
+<h3 id="CAP与ACID"><a href="#CAP与ACID" class="headerlink" title="CAP与ACID"></a>CAP与ACID</h3><p>CAP 原则又称 CAP 定理，指的是在一个分布式系统中， Consistency（一致性）、 Availability（可用性）、Partition tolerance（分区容错性），三个特性最多只能同时满足其中两个。</p>
+<ul>
+<li><strong>一致性</strong>（<strong>C</strong>onsistency）：代表数据在任何时刻、任何分布式节点中所看到的都是符合预期的。</li>
+<li><strong>可用性</strong>（<strong>A</strong>vailability）：代表系统不间断地提供服务的能力，理解可用性要先理解与其密切相关两个指标：可靠性（Reliability）和可维护性（Serviceability）。可靠性使用平均无故障时间（Mean Time Between Failure，MTBF）来度量；可维护性使用平均可修复时间（Mean Time To Repair，MTTR）来度量。可用性衡量系统可以正常使用的时间与总时间之比，其表征为：A&#x3D;MTBF&#x2F;（MTBF+MTTR），即可用性是由可靠性和可维护性计算得出的比例值，譬如 99.9999%可用，即代表平均年故障修复时间为 32 秒。</li>
+<li><strong>分区容忍性</strong>（<strong>P</strong>artition Tolerance）：代表分布式环境中部分节点因网络原因而彼此失联后，即与其他节点形成“网络分区”时，系统仍能正确地提供服务的能力。</li>
+</ul>
+<p>纯聊概念，CAP是很抽象的。举一个例子加以说明，还是经典的转账：</p>
+<p><img src="/./images/PixPin_2025-02-20_17-20-59.png"></p>
+<ul>
+<li>A有100余额，存储在数据库节点1</li>
+<li>B有10余额，存储在数据库节点2</li>
+<li>A给B转账50</li>
+<li>正确情况下，A余额为50，B余额为60</li>
+</ul>
+<p>A用户给自己扣款很容易，但是扣款后，要给存储在另一个数据库节点的B用户增加，可能面临以下情况：</p>
+<ul>
+<li>如果计算节点C1扣款后，A又发起了一次转账60，这时C2节点没有得到数据的同步，认为余额还是100，转出了不该转的金额，这就发生了一致性问题。</li>
+<li>而为了在C1操作时，为了及时将信息同步给其他节点，必须暂停对该用户的转账交易，导致用户再次请求是发生不可能用，此为可用性问题。</li>
+<li>如果计算节点C1在操作过程中，发生了网络问题，所有提供服务的节点数据都有可能出问题，整个集群能否容忍部分节点之间的连接中断而仍然能够提供服务，此为分区容忍性。</li>
+</ul>
+<p>因为CAP不可兼得已经经过了严格的证明，因此我们只讨论三选二的情况下，会有什么影响。</p>
+<ul>
+<li>如果放弃P，即<strong>分区容忍性</strong>（<strong>P</strong>artition Tolerance），架构为CA。则意味着相信网络永远可靠，这个受物理定律的制约，不可能达到，会退化为单机系统，这样就不包含网络传输。</li>
+<li>如果放弃A，即<strong>可用性</strong>（<strong>A</strong>vailability），架构为CP。意味着一旦发生分区，节点之间的数据同步则无限制的Delay。此时问题退化为一个系统使用多个数据源，可以通过2PC&#x2F;3PC的手段去处理，处理失败常见的处理方式为人工介入。选择CP架构通常是对数据质量要求很高的场合，如金融相关的一些架构。</li>
+<li>如果放弃C，即<strong>一致性</strong>（<strong>C</strong>onsistency），架构为AP。意味着一旦发生分区，节点之间所提供的数据可能不一致。AP架构是目前分布式系统的主流选择，因为P是分布式系统的天然属性，放弃意味着放弃分布式，而A通常是构建分布式系统的目的，如果节点多了，反而不可用了，那要什么分布式。除非银行、证券这种会发生资损的场景，在底层选择上就尽可能杜绝出错的可能性，否则大多数业务场景是无法容忍节点越多可用性越低的架构的。</li>
+</ul>
+<p>这就是分布式系统的设计，按下葫芦浮起瓢，不可得兼。</p>
+<p>因为AP放弃了一致性，但是实际场景用，业务对出错的容忍性也非常低，至少也是最终它是正确的。因此，一致性又被衍化出了新的含义，上述ACID和CAP中所讨论的一致性，被称之为<strong>强一致性</strong>，而在AP系统中，尽可能追求获得正确结果的，被称为弱一致性，在弱一致性中，大家又总结出了一种特例，被称为<strong>最终一致性</strong>，最终一致性是指如果数据在一段时间内没有被另外的操作修改，那么它最终会达到与强一致性过程相同的结果，而最终一致性的核心就是：复制。</p>
+<p>而分布式系统中的事务，也不得不从强一致性的事务，降级为追求最终一致性的事务，前者被称之为“刚性事务”，后者被称之为柔性事务。</p>
+<h3 id="柔性事务"><a href="#柔性事务" class="headerlink" title="柔性事务"></a>柔性事务</h3><h4 id="可靠消息表"><a href="#可靠消息表" class="headerlink" title="可靠消息表"></a>可靠消息表</h4><p><img src="/./images/PixPin_2025-02-20_17-21-39.png"></p>
+<ol>
+<li><p>用户A向转账服务发起转账请求：向用户B转账50元。</p>
+</li>
+<li><p>转账服务需要校验用户A的余额，已经做一些风控相关的业务校验。</p>
+</li>
+<li><p>对账户A进行扣款，如果扣款成功，则在自己的数据库建立一张消息表，里面存储的消息为：事务ID，一个uuid，扣款50，扣款状态：成功，收款用户状态：进行中。这里的<strong>要点</strong>是：扣款和消息写入的操作，是放在同一个本地事务中进行写入的</p>
+</li>
+<li><p>在系统中建立一个消息服务，定时轮询消息表，将状态为“进行中”的消息重新发送。此时会有几种后续场景：</p>
+<ol>
+<li>顺利收到转账消息，收款成功，对A用户的服务发送请求，同步转账成功。</li>
+<li>消息接收失败，此时A服务的中的消息服务，因为状态是进行中，所以一直在重发发送消息。这个步骤之所以可以重复，是因为消息服务发送的消息必须具备<strong>幂等性</strong>，常见设计是消息上携带一个唯一的事务ID。</li>
+<li>如果B用户因为某些原因，比如风控，账户被冻结了，无法收款。此时消息表仍然会一直发消息，直到该账户被解冻，或人工介入，因此在业务设计上，本地消息表本身适用的场景是下游业务通常不会存在业务上的失败，这是本地消息表的<strong>缺点</strong>。</li>
+<li>当B用户的服务成功完成了收款，但是请求A服务同步成功的消息时发送了失败，此时仍然会收到A服务的消息服务发来的消息，但是因为消息具有幂等性，所以不会重复收款，此时重新同步收款成功的消息即可。</li>
+<li>某些分布式事务的框架支持消息表，如RocketMQ，原生支持分布式事务，此时可以免去A服务的消息服务。</li>
+</ol>
+<p>上述方案的设计，在计算机的各种设计场景中，均被频繁使用，此种设计被称之为“尽最大努力交付”。</p>
+</li>
+</ol>
+<h4 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h4><p>TCC是另一种常见的分布式事务机制，是“Try-Confirm-Cancel”的缩写。</p>
+<p>可靠消息表虽然能保证最终的结果是相对可靠的，过程也并不复杂，但整个过程中，无法回滚。比如上述转账过程中，B账户遭到冻结，那么A账户的钱应该退回给A，而不是一直在消息表中重复发送。这个业务本身是可回滚，并且时效性的要求没有那么高。</p>
+<p>假设场景为A用户在B商家处购买物品，B提供了一系列的物品，都可以使用B上架的限时优惠券。假设使用消息表实现，A购买购买B商家的显示器，但是买显示器的人很多，等A的购买消息到达后，显示器被卖光了。所以A的消息只能一次次的重复发送，这是一个客观上的失败，因此，面对这种天然可能存在失败的业务，方案设计上就应该避免，TCC就是为了解决这种场景的。</p>
+<p>在具体实现上，TCC对业务的侵入式较强，要求业务在设计之初拆分为“预留业务资源”和“确认&#x2F;释放消费资源”两个子过程。</p>
+<ul>
+<li>Try：尝试执行阶段，完成所有业务可执行性检查（保障一致性），并预留好全部需要用到的业务资源。</li>
+<li>Confirm：确认执行阶段，不进行任何业务检查，直接使用Try阶段准备的资源来完成业务处理。Confirm阶段可能会重复执行，因此本阶段所执行的操作需要具备幂等性。</li>
+<li>Cancel：取消执行阶段，释放Try阶段预留的业务资源。Cancel阶段可能会重复执行，也需要满足幂等性。</li>
+</ul>
+<p><img src="/./images/PixPin_2025-02-20_17-21-50.png"></p>
+<ol>
+<li>用户向商城发送交易请求：买把键盘</li>
+<li>创建事务，生成事务ID，记录在日志中，进入Try：<ol>
+<li>账户服务：检查可行性，如账户余额，冻结399，通常设计是有一张本地的冻结表，在一个本地事务中，扣减399，冻结表中增加399，并记录操作时间，冻结成功则返回Confirm；失败返回Cancel</li>
+<li>仓库服务：检查可行性，冻结一把键盘，成功返回Confirm;失败返回Cancel</li>
+<li>商家服务：检查可行性，不冻结资源</li>
+</ol>
+</li>
+<li>上一步如果所有服务返回可行，则将数据记录在日志中，状态记录为Confirm，进入Confirm阶段<ol>
+<li>用户服务：完成业务操作（扣钱，在冻结表中将状态置为Confirm）</li>
+<li>仓库服务：完成业务操作</li>
+<li>商家服务：完成业务操作</li>
+</ol>
+</li>
+<li>如果第三步全部完成，则事务正常结束，如第三步中有某一方出现异常，无论业务或网络异常（理论上只有网络异常），都将根据日志中的记录，重复Confirm，进行最大努力交付，直到三方全部确认</li>
+<li>如果第二步有异常，无论业务或网络，将日志状态置为Cancel，进入Cancel阶段：<ol>
+<li>用户服务：取消业务操作（把冻结的399加到账户余额，并且状态置为Cancel）</li>
+<li>仓库服务：取消业务操作</li>
+<li>商家服务：取消业务操作</li>
+</ol>
+</li>
+<li>第五步如果全部完成，事务宣告以失败回滚结束，如果第五步中有某一方出现异常，无论业务或网络异常（理论上只有网络异常），都将根据日志中的记录，重复Cancel，进行最大努力交付，直到三方全部确认</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/db/" rel="tag"># db</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/02/12/RPC/" rel="prev" title="RPC">
+                  <i class="fa fa-angle-left"></i> RPC
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Con</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
