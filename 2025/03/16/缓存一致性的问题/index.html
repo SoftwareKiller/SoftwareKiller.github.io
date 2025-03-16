@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="DeepSeek本地部署下载lmstudio，地址：LM Studio - Discover, download, and run local LLMs 使用安装包安装即可，这是用来加载模型的。 下载模型，地址：Hugging Face – The AI community building the future. 因为我的PC上有10G显存的GPU，这里下载的是32B的模型，模型文件的格式要下载">
+    <meta name="description" content="缓存一致性问题分析缓存是指将数据从低速设备加载存储到高速设备上，用于加速访问的一种技术手段。如将硬盘中的数据，缓存到内存中去。 工程中常用的实践方式是，将MySQL中读多写少的数据，缓存至Redis。 因为MySQL和Redis隶属不同的数据组件，因此无法在跨组件的基础上提供“事务”的保障。故而数据不可避免的会出现缓存一致性问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DeepSeek本地部署">
-<meta property="og:url" content="http://example.com/2025/02/11/Deepseek%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:title" content="缓存一致性问题分析">
+<meta property="og:url" content="http://example.com/2025/03/16/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="探索之地">
-<meta property="og:description" content="DeepSeek本地部署下载lmstudio，地址：LM Studio - Discover, download, and run local LLMs 使用安装包安装即可，这是用来加载模型的。 下载模型，地址：Hugging Face – The AI community building the future. 因为我的PC上有10G显存的GPU，这里下载的是32B的模型，模型文件的格式要下载">
+<meta property="og:description" content="缓存一致性问题分析缓存是指将数据从低速设备加载存储到高速设备上，用于加速访问的一种技术手段。如将硬盘中的数据，缓存到内存中去。 工程中常用的实践方式是，将MySQL中读多写少的数据，缓存至Redis。 因为MySQL和Redis隶属不同的数据组件，因此无法在跨组件的基础上提供“事务”的保障。故而数据不可避免的会出现缓存一致性问题。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-02-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-11T15:59:40.999Z">
+<meta property="article:published_time" content="2025-03-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-16T11:28:39.088Z">
 <meta property="article:author" content="Con">
-<meta property="article:tag" content="杂记">
+<meta property="article:tag" content="缓存">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/02/11/Deepseek%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/">
+<link rel="canonical" href="http://example.com/2025/03/16/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E9%97%AE%E9%A2%98/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2025/02/11/Deepseek%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/","path":"2025/02/11/Deepseek本地部署/","title":"DeepSeek本地部署"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2025/03/16/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2025/03/16/缓存一致性的问题/","title":"缓存一致性问题分析"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>DeepSeek本地部署 | 探索之地</title>
+<title>缓存一致性问题分析 | 探索之地</title>
   
 
 
@@ -104,7 +104,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DeepSeek%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2"><span class="nav-number">1.</span> <span class="nav-text">DeepSeek本地部署</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">缓存一致性问题分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E5%8F%8C%E5%88%A0"><span class="nav-number">1.0.1.</span> <span class="nav-text">延迟双删</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E7%BC%93%E5%AD%98%E7%A6%81%E7%94%A8"><span class="nav-number">1.0.2.</span> <span class="nav-text">写缓存禁用</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -153,7 +153,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/02/11/Deepseek%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/16/%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -166,12 +166,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="DeepSeek本地部署 | 探索之地">
+      <meta itemprop="name" content="缓存一致性问题分析 | 探索之地">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          DeepSeek本地部署
+          缓存一致性问题分析
         </h1>
 
         <div class="post-meta-container">
@@ -183,7 +183,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-02-11 00:00:00 / Modified: 23:59:40" itemprop="dateCreated datePublished" datetime="2025-02-11T00:00:00+08:00">2025-02-11</time>
+      <time title="Created: 2025-03-16 00:00:00 / Modified: 19:28:39" itemprop="dateCreated datePublished" datetime="2025-03-16T00:00:00+08:00">2025-03-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -204,14 +204,64 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="DeepSeek本地部署"><a href="#DeepSeek本地部署" class="headerlink" title="DeepSeek本地部署"></a>DeepSeek本地部署</h1><p>下载lmstudio，地址：<a target="_blank" rel="noopener" href="https://lmstudio.ai/">LM Studio - Discover, download, and run local LLMs</a></p>
-<p>使用安装包安装即可，这是用来加载模型的。</p>
-<p>下载模型，地址：<a target="_blank" rel="noopener" href="https://huggingface.co/">Hugging Face – The AI community building the future.</a></p>
-<p>因为我的PC上有10G显存的GPU，这里下载的是32B的模型，模型文件的格式要下载GGUF的格式，如果设备上没有GPU，仅使用CPU推理的话，最大不要超过8B。</p>
-<p>这是我的下载地址：<a target="_blank" rel="noopener" href="https://huggingface.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF/tree/main">bartowski&#x2F;DeepSeek-R1-Distill-Qwen-32B-GGUF at main</a></p>
-<p>下载前可以先通过lmstudio上的推荐查看一下性能是否足够支持。</p>
-<p>下载好之后，模型的目录需要在主目录的2层后才可以正常加载。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.lmstudio/models  <span class="comment"># 这是主目录</span></span><br><span class="line">.lmstudio/models/MyModels/DpR1_32B/md/DeepSeek-R1-Distill-Qwen-32B-IQ2_M</span><br></pre></td></tr></table></figure>
+    <div class="post-body" itemprop="articleBody"><h1 id="缓存一致性问题分析"><a href="#缓存一致性问题分析" class="headerlink" title="缓存一致性问题分析"></a>缓存一致性问题分析</h1><p>缓存是指将数据从低速设备加载存储到高速设备上，用于加速访问的一种技术手段。如将硬盘中的数据，缓存到内存中去。</p>
+<p>工程中常用的实践方式是，将MySQL中<strong>读多写少</strong>的数据，缓存至Redis。</p>
+<p>因为MySQL和Redis隶属不同的数据组件，因此无法在<strong>跨组件的基础上提供“事务”</strong>的保障。故而数据不可避免的会出现缓存一致性问题。</p>
+<span id="more"></span>
+
+<p>我们来思考一个缓存日常的加载操作。</p>
+<table>
+<thead>
+<tr>
+<th align="center">组件&#x2F;操作</th>
+<th align="center">读</th>
+<th align="center">写</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">MySQL</td>
+<td align="center">无数据情况下从MySQL读数据</td>
+<td align="center">MySQL</td>
+</tr>
+<tr>
+<td align="center">Redis</td>
+<td align="center">有数据直接返回</td>
+<td align="center">删缓存</td>
+</tr>
+</tbody></table>
+<ul>
+<li>读操作中，如果Redis中无数据或过期，从MySQL加载</li>
+<li>写操作中，删除缓存，更新MySQL</li>
+</ul>
+<p>发生不一致的情况一定是数据发生了更新，因此我们思考一下写操作的过程中，是否会发生不一致？</p>
+<ol>
+<li>一个写请求到达，请求ID假设为1</li>
+<li>一个读请求到达，请求ID假设为2</li>
+<li>1执行删除缓存</li>
+<li>2从缓存中获取数据</li>
+<li>2从缓存中获取数据，发现为空</li>
+<li>2从DB中加载数据</li>
+<li>1更新DB</li>
+<li>2将数据写入缓存</li>
+</ol>
+<p>至此，不一致就发生了，缓存中是旧数据，DB中是更新后的数据。因为多个请求是并发或并行执行的，因此执行顺序可能是乱序的，并且请求在网络中的顺序，也是没有保障的。</p>
+<p>那么如何解决这个问题？</p>
+<h3 id="延迟双删"><a href="#延迟双删" class="headerlink" title="延迟双删"></a>延迟双删</h3><p>在上述操作中，1更新完DB后，增加一个<strong>缓存删除</strong>操作，大概率可以避免上述问题。延迟时间比一次RTT略长。通常工程上的缓存更新落地即采用此种方式。</p>
+<p>但是延迟双删仍然有其弊端：</p>
+<ul>
+<li>延迟期间，缓存中可能存在脏数据。</li>
+<li>第二次删除有较低的失败的可能。因此工程实践上，如非必要，通常都会给缓存添加一个过期时间，来规避这种情况，达到最终一致。</li>
+</ul>
+<h3 id="写缓存禁用"><a href="#写缓存禁用" class="headerlink" title="写缓存禁用"></a>写缓存禁用</h3><p>为了进一步增强缓存数据的一致性，可以引进“锁”。</p>
+<p>最简单的方式，就是在写缓存操作期间，引进分布式写锁，实现读写隔离。既然不存在并发，那一致性问题确实被规避了，但是代价是性能大幅度下降。引入缓存的目的本来是提升性能，因此这种方法通常不会被接受。</p>
+<p>另一种策略是，在key的数据维度上，维护一个状态，当写操作开始时，将状态置为true。</p>
+<p>在此期间，所有的读操作只从DB中加载数据，不将数据写入缓存之中，直到写操作结束。</p>
+<p>写操作更新状态也通过延迟更新的方式更新，否则也可能与读操作发生竞争问题。</p>
+<p>此种策略可以避免延迟期间出现脏数据的可能，但是因为写期间的读操作直接命中DB，因此会增大DB的压力。</p>
+<p>一种减轻DB压力的方式是：在应用层，将key相同的读请求缓存起来，只对DB请求一次，当结果返回时，同时将请求返回给所有缓存下来的请求。</p>
+<p><a target="_blank" rel="noopener" href="https://pkg.go.dev/golang.org/x/sync/singleflight">singleflight package - golang.org&#x2F;x&#x2F;sync&#x2F;singleflight - Go Packages</a></p>
+<p>Go有对应实践的库，可以很好的完成降低对DB请求量的目的。</p>
+
     </div>
 
     
@@ -220,21 +270,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%9D%82%E8%AE%B0/" rel="tag"># 杂记</a>
+              <a href="/tags/%E7%BC%93%E5%AD%98/" rel="tag"># 缓存</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/01/20/blot/" rel="prev" title="blotdb">
-                  <i class="fa fa-angle-left"></i> blotdb
+                <a href="/2025/03/15/%E5%B8%B8%E8%A7%81%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="prev" title="常见排序算法">
+                  <i class="fa fa-angle-left"></i> 常见排序算法
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/02/11/%E5%B8%B8%E7%94%A8%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7/" rel="next" title="常用抓包工具">
-                  常用抓包工具 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
